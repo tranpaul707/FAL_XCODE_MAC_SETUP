@@ -1,4 +1,78 @@
 # Food-Additive-Lens
+
+## Start here: Xcode setup and first run
+
+1. **Install full Xcode on an Apple silicon Mac.** Get Xcode from the Mac App
+   Store or [Apple Developer downloads](https://developer.apple.com/download/).
+   Open it once and finish any license/component prompts. Command Line Tools
+   alone are not enough. This project targets **iOS 17 or later**; use a compatible
+   iOS Simulator runtime. The recorded working environment used Xcode 27.1;
+   other Xcode versions have not been verified here.
+2. **Install an iOS Simulator runtime** in Xcode → Settings → Components (called
+   Platforms in some versions). If no iPhone simulator is available, create one
+   through Window → Devices and Simulators → Simulators.
+3. **Download or clone this repository**, unzip it if needed, and open
+   `FoodAdditiveLens.xcodeproj` in Xcode (File → Open, or double-click the file).
+   Open the folder containing this README. The project is already configured;
+   you do not need to create a new project or import the Swift files manually.
+4. **Wait for Swift packages to resolve.** Internet access is needed to download
+   the project's pinned dependencies. If resolution fails, use File → Packages →
+   Resolve Package Versions. Keep the committed package versions for this setup.
+5. **Select the `FoodAdditiveLens` scheme** in Xcode's top toolbar, choose an
+   installed **iPhone simulator**, then press **⌘R** (Product → Run). Simulator
+   runs do not require an Apple Developer account or a signing team. Use **⌘U**
+   (Product → Test) to run the included unit and UI tests.
+6. **Try a lookup.** Tap Example, or enter
+   `WATER, CALCIUM PROPIONATE, ASCORBIC ACID`, then choose
+   **Identify & Analyze Additives**. Review the matching additives and technical
+   effects, then try Save Results and History. CFR links appear inside the
+   additive results; opening their external pages requires internet access.
+
+Optional Terminal setup checks, run from the folder containing this README:
+
+```bash
+bash scripts/check-xcode-environment.sh
+open FoodAdditiveLens.xcodeproj
+```
+
+If the selected developer directory points to Command Line Tools or another Xcode
+installation, select the intended Xcode in Xcode → Settings → Locations →
+Command Line Tools, then rerun the check. A missing Metal Toolchain matters for
+building the optional MLX target; installation instructions are below.
+
+### What is included, and the current project state
+
+- **Runnable simulator MVP; original AI feature parity is incomplete.** The
+  standard scheme supports ingredient entry, 20 bundled food samples, direct
+  additive lookup, technical effects/CFR mappings, photo OCR, and local history.
+  The additive knowledge, sample, and CFR resources are already included; no
+  dataset generation, Python setup, or model download is needed for a first run.
+- **AI classification and generated explanations are unavailable** until the
+  original `FoodClassifier.mlpackage`, matching classifier `tokenizer_config.json`,
+  and complete `Llama-3.2-3B-Instruct-4bit/` bundle are recovered. See the
+  [resource requirements](App/Resources/README.md). Direct lookup only finds
+  supported names/aliases; no match does not establish that a food has no additives.
+- **Recorded validation:** the full Phase 4 simulator test command was reported
+  successful after the input-handling fix, and Example/entry selection was
+  manually confirmed. The later explicit simulator camera-to-picker fallback
+  and added CFR-link UI assertion still need a Mac rerun. Manual photo-picker/OCR
+  and external CFR navigation checks remain open; real-camera capture and genuine
+  AI inference are unverified. Phase 4 remains open and Phase 5 is paused. See the
+  [latest checkpoint](docs/PHASE4-SIMULATOR-MVP.md).
+- **For photo testing**, drag an ingredient-label image into the running simulator
+  and use Scan Ingredients → Choose Photo. A simulator cannot take real camera
+  photos. Included synthetic images and import commands are documented in the
+  [photo fixture guide](Tests/Fixtures/README.md).
+- **For a physical iPhone**, select your team under the app target's Signing &
+  Capabilities, use a unique bundle identifier if needed, enable Developer Mode
+  on the device, and select it as the run destination. Device signing/execution
+  has not been verified for the MLX target. The optional `FoodAdditiveLens-MLX`
+  scheme requires supported hardware and Metal; it cannot run in iOS Simulator.
+  Its unsigned generic iOS build passed, but that does not verify inference.
+
+The research notebooks and evaluator spreadsheets are background material, not
+requirements for running the app. More setup details and recorded results follow.
+
 The repository for iOS application Food Additive Lens on App Store
 
 The repository for research paper titled 'Food Additive Lens: An on-device AI application for real-time science-based consumer education on food additives using retrieval-augmented generation'
